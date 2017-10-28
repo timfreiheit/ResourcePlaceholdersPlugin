@@ -6,16 +6,15 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-//        classpath project(":plugin")
 //        classpath 'de.timfreiheit.resourceplaceholders:plugin:0.1'
-//         classpath 'com.github.timfreiheit:ResourcesPlaceholderPlugin:0.1'
+         classpath 'com.github.timfreiheit:ResourcesPlaceholderPlugin:0.1'
     }
 }
 
 apply plugin: 'com.android.application'
 
 // Make sure to apply this plugin *after* the Android plugin
-//apply plugin: 'de.timfreiheit.resourceplaceholders.plugin'
+apply plugin: 'de.timfreiheit.resourceplaceholders.plugin'
 
 android {
     compileSdkVersion 26
@@ -46,9 +45,9 @@ android {
 
 }
 
-//resourcePlaceholders {
-//    files = ['xml/shortcuts.xml']
-//}
+resourcePlaceholders {
+    files = ['xml/shortcuts.xml']
+}
 
 dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'

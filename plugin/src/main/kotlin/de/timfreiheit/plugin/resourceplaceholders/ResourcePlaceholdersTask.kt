@@ -38,11 +38,7 @@ open class ResourcePlaceholdersTask : DefaultTask() {
 
         var content = file.readText(charset = Charsets.UTF_8)
 
-        logger.error("placeholders: $placeholders")
         placeholders.forEach { (key, value) ->
-
-            val keyName = "\${$key}"
-            logger.error("key: $keyName")
             content = content.replace("\${$key}", value.toString())
         }
 
