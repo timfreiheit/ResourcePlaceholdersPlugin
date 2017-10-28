@@ -1,7 +1,7 @@
 ResourcesPlaceholders
 ======
 
-Gradle plugin which adds support for ${placeholder} in Android resource files   
+Gradle plugin which adds support for ${placeholder} manifestPlaceholders in Android resource files   
 
 Installation
 ------------
