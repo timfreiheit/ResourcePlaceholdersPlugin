@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools"
+           tools:ignore="UnusedAttribute">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/shortcut_search"
+        android:shortcutDisabledMessage="@string/shortcut.search"
+        android:shortcutId="search"
+        android:shortcutLongLabel="@string/shortcut.search"
+        android:shortcutShortLabel="@string/shortcut.search">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="de.timfreiheit.plugin.test.MainActivity"
+            android:targetPackage="${applicationId}">
+
+            <extra
+                android:name="source"
+                android:value="SHORTCUT" />
+
+        </intent>
+
+    </shortcut>
+
+</shortcuts>
