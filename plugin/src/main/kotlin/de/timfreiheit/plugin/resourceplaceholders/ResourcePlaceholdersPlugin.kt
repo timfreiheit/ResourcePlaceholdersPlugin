@@ -55,7 +55,7 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
                 throw IllegalStateException("sourceProvider is not an AndroidSourceSet")
             }
 
-            val taskName = "resourcePlaceholdersFor${variant.name.capitalize()}";
+            val taskName = "resourcePlaceholdersFor${variant.name.capitalize()}"
             val task = project.tasks.create(taskName, ResourcePlaceholdersTask::class.java).apply {
                 sources = files
                 outputDir = outputDirectory
@@ -68,7 +68,7 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
             // add dummy folder because the folder is already added to an sourceSet
             // when using the folder defined in the argument the generated resources are at the lowest priority
             // and will cause an conflict with the existing once
-            variant.registerResGeneratingTask(task, File(outputDirectory, "_dummy"))
+            variant.registerGeneratedResFolders(project.files(File(outputDirectory, "_dummy")).builtBy(task))
         }
 
     }
