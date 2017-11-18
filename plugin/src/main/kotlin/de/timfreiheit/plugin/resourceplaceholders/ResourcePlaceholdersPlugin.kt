@@ -59,7 +59,7 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
             val task = project.tasks.create(taskName, ResourcePlaceholdersTask::class.java).apply {
                 sources = files
                 outputDir = outputDirectory
-                placeholders = variant.mergedFlavor.manifestPlaceholders.toMutableMap().apply {
+                placeholders = variant.buildType.manifestPlaceholders + variant.mergedFlavor.manifestPlaceholders.toMutableMap().apply {
                     put("applicationId", variant.applicationId)
                 }.toMap()
             }
