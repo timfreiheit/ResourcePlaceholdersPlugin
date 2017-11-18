@@ -1,7 +1,7 @@
 ResourcesPlaceholders
 ======
 
-Gradle plugin which adds support for ${placeholder}[manifestPlaceholders](https://developer.android.com/studio/build/manifest-build-variables.html)in Android resource files   
+Gradle plugin which adds support for ${placeholder} [manifestPlaceholders](https://developer.android.com/studio/build/manifest-build-variables.html) in Android resource files   
 
 Installation
 ------------
@@ -30,8 +30,8 @@ apply plugin: 'de.timfreiheit.resourceplaceholders.plugin'
 Usage
 ------------
 
-A common use case is using the ``` ${applicationId} ``` when defining[App Shortcuts](https://developer.android.com/preview/shortcuts.html).
-The**android:targetPackage**must be set statically and can not easily be used with different build variants or types.  
+A common use case is using the ``` ${applicationId} ``` when defining [App Shortcuts](https://developer.android.com/preview/shortcuts.html).
+The **android:targetPackage** must be set statically and can not easily be used with different build variants or types.  
 Using placeholders this could look something like:
 
 ```xml
