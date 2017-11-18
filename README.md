@@ -32,7 +32,7 @@ Usage
 
 A common use case is using the ``` ${applicationId} ``` when defining [App Shortcuts](https://developer.android.com/preview/shortcuts.html).
 The **android:targetPackage** must be set statically and can not easily be used with different build variants or types.  
-Using placeholders this could look something like:
+Using placeholders the ``` shortcuts.xml `` file could look something like:
 
 ```xml
 
@@ -47,6 +47,8 @@ Using placeholders this could look something like:
 
 ```
 
+Register the file in your apps ``` build.gradle ``` to the plugin:
+
 ```gradle
 
 resourcePlaceholders {
@@ -56,4 +58,4 @@ resourcePlaceholders {
 ```
 
 Every file in which the placeholders should be supported must be listed.
-This improved incremental builds and unnecessary work.
+This improves incremental builds and avoid unnecessary work.
