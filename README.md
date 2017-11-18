@@ -32,7 +32,7 @@ Usage
 
 A common use case is using the ``` ${applicationId} ``` when defining [App Shortcuts](https://developer.android.com/preview/shortcuts.html).
 The **android:targetPackage** must be set statically and can not easily be used with different build variants or types.  
-Using placeholders the ``` shortcuts.xml `` file could look something like:
+Using placeholders the ``` shortcuts.xml ``` file could look something like:
 
 ```xml
 
