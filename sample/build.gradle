@@ -6,8 +6,8 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-//        classpath 'de.timfreiheit.resourceplaceholders:plugin:0.1'
-         classpath 'com.github.timfreiheit:ResourcePlaceholdersPlugin:0.1'
+        classpath 'de.timfreiheit.resourceplaceholders:plugin:0.1.1'
+//         classpath 'com.github.timfreiheit:ResourcePlaceholdersPlugin:0.1'
     }
 }
 

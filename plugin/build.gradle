@@ -36,7 +36,7 @@ targetCompatibility = JavaVersion.VERSION_1_7
 // Plugin publishing
 
 group = 'de.timfreiheit.resourceplaceholders'
-version = '0.1'
+version = '0.1.1'
 
 plugindev {
     pluginId 'de.timfreiheit.resourceplaceholder.plugin'
