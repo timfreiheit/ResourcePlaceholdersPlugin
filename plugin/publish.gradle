@@ -1,0 +1,27 @@
+
+repositories {
+    jcenter()
+}
+
+// Use java-gradle-plugin to generate plugin descriptors and specify plugin ids
+gradlePlugin {
+    plugins {
+        greetingsPlugin {
+            id = 'de.timfreiheit.resourceplaceholders'
+            implementationClass = 'de.timfreiheit.plugin.resourceplaceholders.ResourcePlaceholdersPlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/timfreiheit/ResourcePlaceholdersPlugin'
+    vcsUrl = 'https://github.com/timfreiheit/ResourcePlaceholdersPlugin.git'
+    tags = ['android', 'resource', 'placeholders']
+    description = "Gradle plugin which adds support for \${placeholder} manifestPlaceholders in Android resource files"
+    plugins {
+        greetingsPlugin {
+            displayName = 'ResourcePlaceholdersPlugin'
+
+        }
+    }
+}

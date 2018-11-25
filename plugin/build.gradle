@@ -1,9 +1,23 @@
+buildscript {
+    ext.kotlin_version = '1.2.71'
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
 
 plugins {
     id 'nu.studer.plugindev' version '1.0.3'
 
     // Should come along with plugindev, but plugindev uses an old version
     id 'com.jfrog.bintray' version '1.2'
+    id "com.gradle.plugin-publish" version "0.10.0"
+    id "java-gradle-plugin"
 }
 
 apply plugin: 'groovy'
@@ -14,8 +28,8 @@ apply plugin: 'maven-publish'
 
 repositories {
     google()
-    maven { url "https://maven.google.com"}
     mavenCentral()
+    jcenter()
 }
 
 // Batik dependencies
@@ -24,19 +38,17 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
     testCompile 'junit:junit:4.12'
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.51'
-    compile 'com.android.tools.build:gradle:3.0.0'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.2.71'
+    compile 'com.android.tools.build:gradle:3.2.1'
 }
 
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
+version = "0.2"
+group = "de.timfreiheit.resourceplaceholders"
 
-// Plugin publishing
-
-group = 'de.timfreiheit.resourceplaceholders'
-version = '0.2'
 
 plugindev {
     pluginId 'de.timfreiheit.resourceplaceholder.plugin'
@@ -52,3 +64,5 @@ plugindev {
     projectInceptionYear '2017'
     done() // do not omit this
 }
+
+apply from: './publish.gradle'
