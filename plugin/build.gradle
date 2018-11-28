@@ -47,7 +47,7 @@ dependencies {
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
-version = "0.2.1"
+version = "0.2"
 group = "de.timfreiheit.resourceplaceholders"
 
 

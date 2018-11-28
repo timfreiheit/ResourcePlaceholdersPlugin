@@ -23,7 +23,4 @@ pluginBundle {
             displayName = 'ResourcePlaceholdersPlugin'
         }
     }
-    mavenCoordinates {
-        artifactId = "placeholders"
-    }
 }
