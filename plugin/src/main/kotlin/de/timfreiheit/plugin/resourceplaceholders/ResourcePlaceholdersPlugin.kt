@@ -16,28 +16,43 @@ import java.io.File
 
 class ResourcePlaceholdersPlugin : Plugin<Project> {
 
-    lateinit var config: ResourcePlaceholdersExtension
+    private lateinit var config: ResourcePlaceholdersExtension
+
+    private var pluginConfigured = false
 
     override fun apply(project: Project) {
 
         config = project.extensions.create("resourcePlaceholders", ResourcePlaceholdersExtension::class.java)
 
-        project.afterEvaluate {
-            project.plugins.all {
-                when (it) {
-                    is AppPlugin -> configureAndroid(project,
-                            project.extensions.getByType(AppExtension::class.java).applicationVariants)
-                    is LibraryPlugin -> configureAndroid(project,
-                            project.extensions.getByType(LibraryExtension::class.java).libraryVariants)
-                }
+        // wait for other plugins added to support applying this before the android plugin
+        project.plugins.whenPluginAdded {
+            project.afterEvaluate { _ ->
+                configure(project)
             }
         }
+    }
 
+    private fun configure(project: Project) {
+        if (pluginConfigured) {
+            // this plugin might be configured multiple times depending on the apply order from other plugins
+            return
+        }
+        project.plugins.all {
+
+            val variants: DomainObjectSet<out BaseVariant>? = when (it) {
+                is AppPlugin -> project.extensions.getByType(AppExtension::class.java).applicationVariants
+                is LibraryPlugin -> project.extensions.getByType(LibraryExtension::class.java).libraryVariants
+                else -> null
+            }
+            if (variants?.isNotEmpty() == true) {
+                pluginConfigured = true
+                configureAndroid(project, variants)
+            }
+        }
     }
 
     private fun <T : BaseVariant> configureAndroid(project: Project, variants: DomainObjectSet<T>) {
         variants.forEach { variant ->
-
             var files: FileCollection = project.files()
             variant.sourceSets.forEach { sourceSet ->
                 val collectedFiles = searchFilesInSourceSet(sourceSet)
