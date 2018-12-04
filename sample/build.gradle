@@ -1,20 +1,17 @@
 buildscript {
     repositories {
+        mavenLocal()
         google()
         jcenter()
-        mavenLocal()
         maven { url "https://jitpack.io" }
     }
     dependencies {
-//        classpath 'de.timfreiheit.resourceplaceholders:plugin:0.1.1'
-         classpath 'com.github.timfreiheit:ResourcePlaceholdersPlugin:0.1'
+        classpath 'de.timfreiheit.resourceplaceholders:placeholders:0.3'
     }
 }
 
-apply plugin: 'com.android.application'
-
-// Make sure to apply this plugin *after* the Android plugin
 apply plugin: 'de.timfreiheit.resourceplaceholders.plugin'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
