@@ -8,22 +8,30 @@ Installation
 
 Add the following to your `build.gradle`:
 
+Build script snippet for plugins DSL:
+```gradle
+plugins {
+  id "de.timfreiheit.resourceplaceholders" version "0.3"
+}
+```
+
+Build script snippet for use where dynamic configuration is required:
 ```gradle
 
 buildscript {
     repositories {
         // ...
-        maven { url "https://jitpack.io" }
+        maven {
+          url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
-        classpath 'com.github.timfreiheit:ResourcePlaceholdersPlugin:X.X.X'
+        classpath "de.timfreiheit.resourceplaceholders:placeholders:X.X.X"
     }
 }
 
 apply plugin: 'com.android.application'
-
-// Make sure to apply this plugin *after* the Android plugin
-apply plugin: 'de.timfreiheit.resourceplaceholders.plugin'
+apply plugin: "de.timfreiheit.resourceplaceholders"
 
 ```
 
