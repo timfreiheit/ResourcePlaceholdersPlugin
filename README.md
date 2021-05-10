@@ -11,7 +11,7 @@ Add the following to your `build.gradle`:
 Build script snippet for plugins DSL:
 ```gradle
 plugins {
-  id "de.timfreiheit.resourceplaceholders" version "0.3"
+  id "de.timfreiheit.resourceplaceholders" version "X.X.X"
 }
 ```
 
