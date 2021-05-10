@@ -1,11 +1,11 @@
 package de.timfreiheit.plugin.test;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -16,5 +16,4 @@ public class MainActivity extends AppCompatActivity {
         TextView textView = findViewById(R.id.text);
         textView.setText("Extra: " + getIntent().getStringExtra("source"));
     }
-
 }

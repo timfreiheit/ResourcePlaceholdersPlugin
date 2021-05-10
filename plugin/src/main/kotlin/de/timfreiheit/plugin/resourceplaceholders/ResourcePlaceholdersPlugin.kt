@@ -22,14 +22,22 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
 
-        config = project.extensions.create("resourcePlaceholders", ResourcePlaceholdersExtension::class.java)
+        config = project.extensions.create(
+            "resourcePlaceholders",
+            ResourcePlaceholdersExtension::class.java
+        )
 
         // wait for other plugins added to support applying this before the android plugin
         project.plugins.whenPluginAdded {
-            project.afterEvaluate { _ ->
+            if (project.state.executed) {
                 configure(project)
+            } else {
+                project.afterEvaluate { _ ->
+                    configure(project)
+                }
             }
         }
+        configure(project)
     }
 
     private fun configure(project: Project) {
@@ -74,16 +82,20 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
             val task = project.tasks.create(taskName, ResourcePlaceholdersTask::class.java).apply {
                 sources = files
                 outputDir = outputDirectory
-                placeholders = variant.buildType.manifestPlaceholders + variant.mergedFlavor.manifestPlaceholders.toMutableMap().apply {
-                    put("applicationId", variant.applicationId)
-                }.toMap()
+                placeholders =
+                    variant.buildType.manifestPlaceholders + variant.mergedFlavor.manifestPlaceholders.toMutableMap()
+                        .apply {
+                            put("applicationId", variant.applicationId)
+                        }.toMap()
             }
 
             // register task to make it run before resource merging
             // add dummy folder because the folder is already added to an sourceSet
             // when using the folder defined in the argument the generated resources are at the lowest priority
             // and will cause an conflict with the existing once
-            variant.registerGeneratedResFolders(project.files(File(outputDirectory, "_dummy")).builtBy(task))
+            variant.registerGeneratedResFolders(
+                project.files(File(outputDirectory, "_dummy")).builtBy(task)
+            )
         }
 
     }
