@@ -1,8 +1,4 @@
 
-repositories {
-    jcenter()
-}
-
 // Use java-gradle-plugin to generate plugin descriptors and specify plugin ids
 gradlePlugin {
     plugins {
