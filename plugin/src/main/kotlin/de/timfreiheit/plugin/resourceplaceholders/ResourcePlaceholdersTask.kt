@@ -27,27 +27,30 @@ open class ResourcePlaceholdersTask : DefaultTask() {
     lateinit var outputDir: File
 
     @TaskAction
-    fun execute(inputs: IncrementalTaskInputs) {
-
-        for (file in sources) {
-            applyPlaceholders(file)
-        }
+    fun execute() {
+        sources
+            .associateBy { outputFile(it) }
+            .forEach { (outputFile, inputFile) ->
+                applyPlaceholders(inputFile, outputFile)
+            }
     }
 
-    private fun applyPlaceholders(file: File) {
+    private fun outputFile(inputFile: File): File {
+        val outputFileDir = File(outputDir, inputFile.parentFile.name)
+        return File(outputFileDir, inputFile.name)
+    }
 
-        var content = file.readText(charset = Charsets.UTF_8)
+    private fun applyPlaceholders(inputFile: File, outputFile: File) {
+        var content = inputFile.readText(charset = Charsets.UTF_8)
 
         placeholders.forEach { (key, value) ->
             content = content.replace("\${$key}", value.toString())
         }
 
-        val outputFileDir = File(outputDir, file.parentFile.name)
-        outputFileDir.mkdirs()
-
-        val outputFile = File(outputFileDir, file.name)
-        outputFile.createNewFile()
-
-        outputFile.writeText(content, charset = Charsets.UTF_8)
+        outputFile.apply {
+            parentFile.mkdirs()
+            createNewFile()
+            writeText(content, charset = Charsets.UTF_8)
+        }
     }
 }
