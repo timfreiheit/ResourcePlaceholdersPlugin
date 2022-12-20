@@ -1,8 +1,10 @@
 package de.timfreiheit.plugin.resourceplaceholders
 
-
+import com.android.build.api.AndroidPluginVersion
+import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.LibraryPlugin
 import com.android.build.gradle.api.AndroidSourceSet
@@ -19,16 +21,20 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
     private lateinit var config: ResourcePlaceholdersExtension
 
     private var pluginConfigured = false
+    private var srcDirsAdded = false
 
     override fun apply(project: Project) {
-
         config = project.extensions.create(
             "resourcePlaceholders",
             ResourcePlaceholdersExtension::class.java
         )
 
+        checkIfNeedsToAddSrcDirs(project)
+
         // wait for other plugins added to support applying this before the android plugin
         project.plugins.whenPluginAdded {
+            checkIfNeedsToAddSrcDirs(project)
+
             if (project.state.executed) {
                 configure(project)
             } else {
@@ -46,7 +52,6 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
             return
         }
         project.plugins.all {
-
             val variants: DomainObjectSet<out BaseVariant>? = when (it) {
                 is AppPlugin -> project.extensions.getByType(AppExtension::class.java).applicationVariants
                 is LibraryPlugin -> project.extensions.getByType(LibraryExtension::class.java).libraryVariants
@@ -68,7 +73,7 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
                 files = files.plus(fileCollection) ?: fileCollection
             }
 
-            val outputDirectory = getOutputDirForVariant(project, variant)
+            val outputDirectory = getOutputDirForVariant(project, variant.name)
             // add new resource folder to sourceSet with the highest priority
             // this makes sure the new icons will override the original one
             val sourceProvider = variant.sourceSets[variant.sourceSets.size - 1]
@@ -84,9 +89,9 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
                 outputDir = outputDirectory
                 placeholders =
                     variant.buildType.manifestPlaceholders + variant.mergedFlavor.manifestPlaceholders.toMutableMap()
-                        .apply {
-                            put("applicationId", variant.applicationId)
-                        }.toMap()
+                    .apply {
+                        put("applicationId", variant.applicationId)
+                    }.toMap()
             }
 
             // register task to make it run before resource merging
@@ -97,7 +102,6 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
                 project.files(File(outputDirectory, "_dummy")).builtBy(task)
             )
         }
-
     }
 
     private fun searchFilesInSourceSet(sourceSet: SourceProvider): List<File> {
@@ -113,8 +117,37 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
         return files
     }
 
-    private fun getOutputDirForVariant(project: Project, variant: BaseVariant): File {
-        return project.file("${project.buildDir}/generated/res/resourcesPlaceholders/${variant.flavorName}/${variant.buildType.name}/")
+    private fun getOutputDirForVariant(project: Project, variant: String): File {
+        return project.file("${project.buildDir}/generated/res/resourcesPlaceholders/$variant")
     }
 
+    /** With the new Variant API we need to add the source dirs before variants to be fully configured */
+    private fun checkIfNeedsToAddSrcDirs(project: Project) {
+        val extension = project
+            .extensions
+            .findByType(AndroidComponentsExtension::class.java) ?: return
+
+        if (extension.pluginVersion >= AndroidPluginVersion(7, 3) && !srcDirsAdded) {
+            addSrcDirsBeforeVariants(
+                extension = extension,
+                androidBaseExtension = project.extensions.getByType(BaseExtension::class.java),
+                project = project
+            )
+            srcDirsAdded = true
+        }
+    }
+
+    private fun addSrcDirsBeforeVariants(
+        extension: AndroidComponentsExtension<*, *, *>,
+        androidBaseExtension: BaseExtension,
+        project: Project
+    ) {
+        extension.onVariants {
+            androidBaseExtension.sourceSets.forEach {
+                val dir = getOutputDirForVariant(project, it.name)
+                println(dir)
+                it.res.srcDir(dir)
+            }
+        }
+    }
 }

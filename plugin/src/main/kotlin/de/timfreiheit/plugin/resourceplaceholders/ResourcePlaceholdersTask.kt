@@ -28,14 +28,12 @@ open class ResourcePlaceholdersTask : DefaultTask() {
 
     @TaskAction
     fun execute(inputs: IncrementalTaskInputs) {
-
         for (file in sources) {
             applyPlaceholders(file)
         }
     }
 
     private fun applyPlaceholders(file: File) {
-
         var content = file.readText(charset = Charsets.UTF_8)
 
         placeholders.forEach { (key, value) ->

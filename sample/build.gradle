@@ -7,7 +7,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'de.timfreiheit.resourceplaceholders:placeholders:0.4'
+        classpath 'de.timfreiheit.resourceplaceholders:placeholders:0.5'
     }
 }
 
