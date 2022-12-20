@@ -1,11 +1,11 @@
 buildscript {
-    ext.kotlin_version = '1.4.31'
+    ext.kotlin_version = '1.7.22'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -27,13 +27,13 @@ allprojects {
     }
 }
 
-version = "0.4"
+version = "0.5"
 group = "de.timfreiheit.resourceplaceholders"
 
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
-    implementation 'com.android.tools.build:gradle:4.2.0'
+    implementation 'com.android.tools.build:gradle:4.2.2'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
