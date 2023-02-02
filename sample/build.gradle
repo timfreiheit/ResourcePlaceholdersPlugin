@@ -2,12 +2,13 @@ buildscript {
     repositories {
         mavenLocal()
         google()
+        gradlePluginPortal()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
-        classpath 'de.timfreiheit.resourceplaceholders:placeholders:0.5'
+        classpath "pt.jcosta.resourceplaceholders:plugin:0.6"
     }
 }
 

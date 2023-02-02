@@ -1,9 +1,8 @@
-
 // Use java-gradle-plugin to generate plugin descriptors and specify plugin ids
 gradlePlugin {
     plugins {
         resourcePlaceHoldersPlugin {
-            id = 'de.timfreiheit.resourceplaceholders'
+            id = 'pt.jcosta.resourceplaceholders'
             implementationClass = 'de.timfreiheit.plugin.resourceplaceholders.ResourcePlaceholdersPlugin'
         }
     }

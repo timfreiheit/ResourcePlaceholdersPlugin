@@ -145,7 +145,6 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
         extension.onVariants {
             androidBaseExtension.sourceSets.forEach {
                 val dir = getOutputDirForVariant(project, it.name)
-                println(dir)
                 it.res.srcDir(dir)
             }
         }
