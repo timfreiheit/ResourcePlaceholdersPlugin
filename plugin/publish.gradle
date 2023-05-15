@@ -1,21 +1,15 @@
 // Use java-gradle-plugin to generate plugin descriptors and specify plugin ids
 gradlePlugin {
-    plugins {
-        resourcePlaceHoldersPlugin {
-            id = 'pt.jcosta.resourceplaceholders'
-            implementationClass = 'de.timfreiheit.plugin.resourceplaceholders.ResourcePlaceholdersPlugin'
-        }
-    }
-}
+    website= "https://github.com/timfreiheit/ResourcePlaceholdersPlugin"
+    vcsUrl = "https://github.com/timfreiheit/ResourcePlaceholdersPlugin.git"
 
-pluginBundle {
-    website = 'https://github.com/timfreiheit/ResourcePlaceholdersPlugin'
-    vcsUrl = 'https://github.com/timfreiheit/ResourcePlaceholdersPlugin.git'
-    tags = ['android', 'resource', 'placeholders']
-    description = "Gradle plugin which adds support for \${placeholder} manifestPlaceholders in Android resource files"
     plugins {
         resourcePlaceHoldersPlugin {
-            displayName = 'ResourcePlaceholdersPlugin'
+            id = "pt.jcosta.resourceplaceholders"
+            implementationClass = "de.timfreiheit.plugin.resourceplaceholders.ResourcePlaceholdersPlugin"
+            displayName = "ResourcePlaceholdersPlugin"
+            description = "Gradle plugin which adds support for \${placeholder} manifestPlaceholders in Android resource files"
+            tags.set(["android", "resource", "placeholders"])
         }
     }
 }

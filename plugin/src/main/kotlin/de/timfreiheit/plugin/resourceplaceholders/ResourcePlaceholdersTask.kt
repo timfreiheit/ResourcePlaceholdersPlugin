@@ -6,7 +6,6 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.incremental.IncrementalTaskInputs
 import java.io.File
 
 /**
@@ -27,7 +26,7 @@ open class ResourcePlaceholdersTask : DefaultTask() {
     lateinit var outputDir: File
 
     @TaskAction
-    fun execute(inputs: IncrementalTaskInputs) {
+    fun execute() {
         for (file in sources) {
             applyPlaceholders(file)
         }

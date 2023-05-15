@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'com.android.tools.build:gradle:8.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -13,7 +13,7 @@ buildscript {
 plugins {
     id "java-gradle-plugin"
     id 'maven-publish'
-    id 'com.gradle.plugin-publish' version '0.14.0'
+    id 'com.gradle.plugin-publish' version '1.2.0'
 }
 
 apply plugin: 'groovy'
@@ -27,16 +27,16 @@ allprojects {
     }
 }
 
-version = "0.6"
+version = "0.7"
 group = "pt.jcosta.resourceplaceholders"
 
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
-    implementation 'com.android.tools.build:gradle:7.4.1'
+    implementation 'com.android.tools.build:gradle:8.0.1'
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 apply from: './publish.gradle'

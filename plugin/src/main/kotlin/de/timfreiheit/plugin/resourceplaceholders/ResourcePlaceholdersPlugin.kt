@@ -9,6 +9,7 @@ import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.LibraryPlugin
 import com.android.build.gradle.api.AndroidSourceSet
 import com.android.build.gradle.api.BaseVariant
+import com.android.build.gradle.tasks.ExtractDeepLinksTask
 import com.android.builder.model.SourceProvider
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.Plugin
@@ -92,6 +93,10 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
                     .apply {
                         put("applicationId", variant.applicationId)
                     }.toMap()
+            }
+
+            project.tasks.withType(ExtractDeepLinksTask::class.java).configureEach {
+                it.dependsOn(project.tasks.withType(ResourcePlaceholdersTask::class.java))
             }
 
             // register task to make it run before resource merging
