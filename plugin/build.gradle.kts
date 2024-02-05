@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "pt.jcosta.resourceplaceholders"
-version = "0.10.0"
+version = "0.11.0"
 
 // Use java-gradle-plugin to generate plugin descriptors and specify plugin ids
 gradlePlugin {

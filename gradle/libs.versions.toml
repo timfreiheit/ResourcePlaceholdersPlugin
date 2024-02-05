@@ -7,4 +7,4 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 application = { id = "com.android.application", version.ref = "androidGradle" }
 library = { id = "com.android.library", version.ref = "androidGradle" }
 androidGradleX = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-resourcePlaceholders = "pt.jcosta.resourceplaceholders:0.10.0"
+resourcePlaceholders = "pt.jcosta.resourceplaceholders:0.11.0"

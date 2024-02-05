@@ -48,6 +48,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+
     flavorDimensions += listOf("env")
     productFlavors {
         create("staging") {
