@@ -18,7 +18,7 @@
 
             <extra
                 android:name="source"
-                android:value="SHORTCUT" />
+                android:value="${testPlaceholder}" />
 
         </intent>
 
