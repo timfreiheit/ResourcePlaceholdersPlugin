@@ -1,6 +1,7 @@
 package de.timfreiheit.plugin.resourceplaceholders
 
 import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.ApplicationVariant
 import com.android.build.gradle.api.AndroidBasePlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -45,6 +46,12 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
 
             val files = project.getResDirs()
 
+            val placeholders = variant.manifestPlaceholders.apply {
+                if (variant is ApplicationVariant) {
+                    put("applicationId", variant.applicationId)
+                }
+            }
+
             val task =
                 project.tasks.register(taskName, ResourcePlaceholdersTask::class.java) { task ->
                     task.inputs.files(files)
@@ -52,7 +59,7 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
                     task.variantName = variant.name
                     task.source = variant.sources.res?.all
                     task.overrideFiles.set(extension.files)
-                    task.placeholders.set(variant.manifestPlaceholders)
+                    task.placeholders.set(placeholders)
                     task.destination.set(outputDir)
                 }
 
