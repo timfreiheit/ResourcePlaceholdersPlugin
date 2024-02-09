@@ -46,20 +46,16 @@ class ResourcePlaceholdersPlugin : Plugin<Project> {
 
             val files = project.getResDirs()
 
-            val placeholders = variant.manifestPlaceholders.apply {
-                if (variant is ApplicationVariant) {
-                    put("applicationId", variant.applicationId)
-                }
-            }
-
             val task =
                 project.tasks.register(taskName, ResourcePlaceholdersTask::class.java) { task ->
                     task.inputs.files(files)
                     task.group = "resource-placeholders"
                     task.variantName = variant.name
+                    task.applicationId =
+                        if (variant is ApplicationVariant) variant.applicationId.get() else null
                     task.source = variant.sources.res?.all
                     task.overrideFiles.set(extension.files)
-                    task.placeholders.set(placeholders)
+                    task.placeholders.set(variant.manifestPlaceholders)
                     task.destination.set(outputDir)
                 }
 

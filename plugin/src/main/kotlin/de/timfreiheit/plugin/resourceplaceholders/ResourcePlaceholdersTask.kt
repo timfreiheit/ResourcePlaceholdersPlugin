@@ -9,6 +9,7 @@ import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.slf4j.LoggerFactory
@@ -30,6 +31,10 @@ abstract class ResourcePlaceholdersTask : DefaultTask() {
     @get:Input
     abstract var variantName: String
 
+    @get:Optional
+    @get:Input
+    abstract var applicationId: String?
+
     @get:OutputDirectory
     abstract val destination: DirectoryProperty
 
@@ -45,6 +50,7 @@ abstract class ResourcePlaceholdersTask : DefaultTask() {
         }
         logger.info("Placeholders: ${placeholders.get()}")
         logger.info("Name: $variantName")
+        logger.info("Application Id: ${applicationId}")
 
         val folder = destination.get()
         cleanBuildDirectory(folder.asFileTree)
@@ -81,7 +87,13 @@ abstract class ResourcePlaceholdersTask : DefaultTask() {
     private fun applyPlaceholders(file: File) {
         var content = file.readText(charset = Charsets.UTF_8)
 
-        placeholders.get().forEach { (key, value) ->
+        val placeholdersToApply = placeholders.get().toMutableMap()
+
+        applicationId?.let {
+            placeholdersToApply.put("applicationId", it)
+        }
+
+        placeholdersToApply.forEach { (key, value) ->
             content = content.replace("\${$key}", value.toString())
         }
 
