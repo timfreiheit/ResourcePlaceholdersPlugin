@@ -1,53 +1,112 @@
 package de.timfreiheit.plugin.resourceplaceholders
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileCollection
+import org.gradle.api.file.Directory
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.FileTree
+import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.MapProperty
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.incremental.IncrementalTaskInputs
+import org.slf4j.LoggerFactory
 import java.io.File
 
 /**
  * tasks must not be final
  */
-open class ResourcePlaceholdersTask : DefaultTask() {
+abstract class ResourcePlaceholdersTask : DefaultTask() {
 
-    @get:InputFiles
-    lateinit var sources: FileCollection
+    private val logger = LoggerFactory.getLogger("Resource Placeholder")
+
+    @get:Internal
+    abstract var source: Provider<List<Collection<Directory>>>?
 
     @get:Input
-    lateinit var placeholders: Map<String, Any>
+    abstract val overrideFiles: ListProperty<String>
 
-    /**
-     * The output directory.
-     */
+    @get:Input
+    abstract var variantName: String
+
+    @get:Optional
+    @get:Input
+    abstract var applicationId: String?
+
     @get:OutputDirectory
-    lateinit var outputDir: File
+    abstract val destination: DirectoryProperty
+
+    @get:Input
+    abstract val placeholders: MapProperty<String, String>
 
     @TaskAction
-    fun execute(inputs: IncrementalTaskInputs) {
+    fun action() {
+        source?.get()?.forEach {
+            it.forEach {
+                logger.info("Source: ${it.asFile.absolutePath}")
+            }
+        }
+        logger.info("Placeholders: ${placeholders.get()}")
+        logger.info("Name: $variantName")
+        logger.info("Application Id: ${applicationId}")
 
-        for (file in sources) {
-            applyPlaceholders(file)
+        val folder = destination.get()
+        cleanBuildDirectory(folder.asFileTree)
+
+        source?.get()?.forEach {
+            it.forEach { dir ->
+                val collectedFiles = searchFilesInSourceSet(dir)
+                collectedFiles.forEach { file ->
+                    applyPlaceholders(file)
+                }
+            }
         }
     }
 
-    private fun applyPlaceholders(file: File) {
+    private fun cleanBuildDirectory(fileTree: FileTree) {
+        fileTree.files.forEach {
+            logger.info("Deleting ${it.name}")
+            it.deleteRecursively()
+        }
+    }
 
+    private fun searchFilesInSourceSet(directory: Directory): List<File> {
+        val files = mutableListOf<File>()
+        overrideFiles.get().forEach { fileName ->
+            val file = File(directory.asFile, fileName)
+            if (file.exists() && !file.isDirectory) {
+                files.add(file)
+            }
+        }
+
+        return files
+    }
+
+    private fun applyPlaceholders(file: File) {
         var content = file.readText(charset = Charsets.UTF_8)
 
-        placeholders.forEach { (key, value) ->
+        val placeholdersToApply = placeholders.get().toMutableMap()
+
+        applicationId?.let {
+            placeholdersToApply.put("applicationId", it)
+        }
+
+        placeholdersToApply.forEach { (key, value) ->
             content = content.replace("\${$key}", value.toString())
         }
 
-        val outputFileDir = File(outputDir, file.parentFile.name)
+        val outputFileDir = File(
+            destination.get().asFile,
+            file.parentFile.name
+        )
         outputFileDir.mkdirs()
 
         val outputFile = File(outputFileDir, file.name)
         outputFile.createNewFile()
 
         outputFile.writeText(content, charset = Charsets.UTF_8)
+        logger.info("Creating ${outputFile.absolutePath}")
     }
 }
